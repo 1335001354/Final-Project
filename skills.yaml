@@ -1,0 +1,23 @@
+# 这个文件现在只定义技能的“行为模板”
+
+致死打击:
+  target_type: 'enemy'
+  effects_to_apply:
+    - name: "虚弱"
+
+撕裂:
+  target_type: 'enemy'
+  effects_to_apply:
+    - name: "流血"
+      potency: 25 # 注意：像这种效果的数值，如果它不因英雄而变，可以保留在这里作为默认值
+      duration: 2
+
+火球术:
+  target_type: 'enemy'
+  # 火球术本身不附加任何持续效果
+  effects_to_apply: []
+
+霜之新星:
+  target_type: 'enemy'
+  effects_to_apply:
+    - name: "眩晕"

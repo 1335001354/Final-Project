@@ -1,0 +1,58 @@
+剧毒:
+  default_params:
+    duration: 3
+    potency: 20
+    is_control_effect: false
+  logic_hooks:
+    ON_TURN_START:
+      - type: DEAL_DAMAGE
+        target: owner # 'owner' 指效果的持有者
+        amount:
+          source: effect # 数值来源是效果本身
+          value: potency  # 效果的 potency 属性
+        damage_type: poison
+流血:
+  default_params:
+    duration: 2
+    potency: 25 # 25点流血伤害
+    is_control_effect: false
+  logic_hooks:
+    ON_TURN_START:
+      - type: DEAL_DAMAGE
+        target: owner
+        amount:
+          source: effect
+          value: potency
+        damage_type: bleed # 流血伤害类型
+
+虚弱:
+  default_params:
+    duration: 2
+    potency: 0.3 # 30%
+    is_control_effect: false
+    # 自定义参数，供被动逻辑使用
+    target_attribute: attack 
+  logic_hooks:
+    PASSIVE:
+      - type: MODIFY_ATTRIBUTE
+        # 被动逻辑需要返回修饰符，供 __getattr__ 使用
+        # 这里的表达式会被一个简易的解释器处理
+        returns:
+          ratio: "1.0 - effect.potency"
+          flat: 0
+
+眩晕:
+  default_params:
+    duration: 1
+    is_control_effect: true
+  logic_hooks:
+    ON_APPLY:
+      - type: SET_FLAG
+        target: owner
+        flag_name: is_stunned
+        value: true
+    ON_REMOVE:
+      - type: SET_FLAG
+        target: owner
+        flag_name: is_stunned
+        value: false

@@ -1,0 +1,29 @@
+加尔鲁什:
+  class: 'Hero'
+  base_stats:
+    hp: 1200
+    attack: 90
+    armor: 40
+    speed: 20
+  skills:
+    - name: "致死打击"           # 技能模板名
+      damage_multiplier: 1.5   # 伤害倍率在这里定义
+      cooldown: 2              # 冷却时间在这里定义
+    - name: "撕裂"
+      damage_multiplier: 0.5
+      cooldown: 1
+
+吉安娜:
+  class: 'Hero'
+  base_stats:
+    hp: 850
+    attack: 110
+    armor: 20
+    speed: 30
+  skills:
+    - name: "火球术"
+      damage_multiplier: 2.2   # 吉安娜的火球术倍率更高
+      cooldown: 3
+    - name: "霜之新星"
+      damage_multiplier: 0.3
+      cooldown: 2
