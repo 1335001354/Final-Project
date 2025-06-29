@@ -1,7 +1,8 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Callable, List, Any, Dict, Optional, TYPE_CHECKING
+from typing import Callable, List, Any, Dict, Optional, TYPE_CHECKING, Union
 from abc import ABC
+import random
 
 # 确保从您的其他文件中正确导入
 from enums import TriggerPhase
@@ -40,12 +41,13 @@ class Unit(ABC):
             for skill in skills:
                 self.skills[skill.name] = skill # 修正了赋值错误
         
-        # --- 3. 定义核心“可计算”属性 ---
+        # --- 3. 定义核心"可计算"属性 ---
         # 彻底移除了关于 'effects' 的错误定义
         self._define_core_attribute('hp', kwargs.get('hp', 0))
         self._define_core_attribute('attack', kwargs.get('attack', 0))
         self._define_core_attribute('armor', kwargs.get('armor', 0))
         self._define_core_attribute('speed', kwargs.get('speed', 0))
+        self._define_core_attribute('crit_rate', kwargs.get('crit_rate', 0.0), float)
         
         # --- 4. 设置其他实例变量 ---
         self.name = kwargs.get('name', 'Unnamed Unit')
@@ -55,7 +57,7 @@ class Unit(ABC):
     def _define_core_attribute(self, name: str, base_value: float, final_type: Callable = int):
         self._attributes[name] = Attribute(base=base_value, final_type=final_type)
 
-    def add_effect(self, effect: 'GenericEffect' | None):
+    def add_effect(self, effect: Union['GenericEffect', None]):
         if effect:
             self.effects.append(effect)
             effect.on_apply(self)
@@ -77,23 +79,29 @@ class Unit(ABC):
             return attr_obj.final_type(final_value)
         raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
 
-    def take_damage(self, amount: int):
-        final_damage = max(0, amount - self.armor)
+    def take_damage(self, amount: int, is_crit: bool = False):
+        # 新的护甲计算逻辑：护甲越高，免伤比例越接近1
+        armor_value = self.armor
+        damage_reduction_ratio = armor_value / (armor_value + 100)
+        final_damage = int(amount * (1 - damage_reduction_ratio))
+        if is_crit:
+            final_damage *= 2
+            print(f"[暴击！]{self.name} 受到暴击伤害！")
         self.current_hp -= final_damage
-        print(f"[{self.name}] 受到了 {final_damage} 点伤害，当前生命值: {self.current_hp}/{self.hp}")
+        print(f"[{self.name}] 护甲减免了 {int(amount * damage_reduction_ratio)} 点伤害，受到了 {final_damage} 点伤害，当前生命值: {self.current_hp}/{self.hp}")
 
     def act(self, opponent: 'Unit'):
         if self.is_stunned:
             print(f"[{self.name}] 处于眩晕状态，无法行动！")
             return
-            
         for skill in self.skills.values():
             if skill.is_ready():
                 skill.use(self, opponent)
                 return
-        
         print(f"[{self.name}] 没有可用的技能，执行普通攻击。")
-        opponent.take_damage(self.attack)
+        # 普通攻击暴击判定
+        is_crit = random.random() < self.crit_rate
+        opponent.take_damage(self.attack, is_crit=is_crit)
 
     def tick_skill_cooldowns(self):
         for skill in self.skills.values():

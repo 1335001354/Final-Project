@@ -1,6 +1,7 @@
 # skill.py
 from __future__ import annotations
 from typing import List, Dict, Any, TYPE_CHECKING
+import random
 
 if TYPE_CHECKING:
     from hero import Unit
@@ -47,7 +48,9 @@ class Skill:
         # 1. 计算并施加伤害
         if self.damage_multiplier > 0:
             damage = int(user.attack * self.damage_multiplier)
-            opponent.take_damage(damage)
+            # 技能暴击判定
+            is_crit = random.random() < user.crit_rate
+            opponent.take_damage(damage, is_crit=is_crit)
 
         # 2. 施加效果
         for effect_data in self.effects_to_apply:

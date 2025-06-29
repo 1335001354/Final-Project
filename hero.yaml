@@ -5,6 +5,7 @@
     attack: 90
     armor: 40
     speed: 20
+    crit_rate: 0.2
   skills:
     - name: "致死打击"           # 技能模板名
       damage_multiplier: 1.5   # 伤害倍率在这里定义
@@ -20,6 +21,7 @@
     attack: 110
     armor: 20
     speed: 30
+    crit_rate: 0.25
   skills:
     - name: "火球术"
       damage_multiplier: 2.2   # 吉安娜的火球术倍率更高
