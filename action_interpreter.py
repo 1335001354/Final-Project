@@ -68,6 +68,23 @@ class ActionInterpreter:
         if target and amount > 0:
             target.take_damage(int(amount))
 
+    def _handle_heal(self, params: Dict, context: Dict):
+        target = self._resolve_target(params.get('target'), context)
+        amount = self._resolve_value(params.get('amount'), context)
+        if target and amount > 0:
+            heal_amount = min(amount, target.hp - target.current_hp)
+            target.current_hp += heal_amount
+            print(f"[{target.name}] 恢复了 {heal_amount} 点生命值，当前生命值: {target.current_hp}/{target.hp}")
+
+    def _handle_clear_effects(self, params: Dict, context: Dict):
+        target = self._resolve_target(params.get('target'), context)
+        if target and target.effects:
+            removed_effects = list(target.effects)
+            target.effects.clear()
+            for effect in removed_effects:
+                effect.on_remove(target)
+            print(f"[{target.name}] 的所有效果被清除了！")
+
     def _handle_set_flag(self, params: Dict, context: Dict):
         target = self._resolve_target(params.get('target'), context)
         flag_name = params.get('flag_name')

@@ -56,3 +56,204 @@
         target: owner
         flag_name: is_stunned
         value: false
+
+# 新增效果
+护甲强化:
+  default_params:
+    duration: 2
+    potency: 0.5
+    is_control_effect: false
+    target_attribute: armor
+  logic_hooks:
+    PASSIVE:
+      - type: MODIFY_ATTRIBUTE
+        returns:
+          ratio: "1.0 + effect.potency"
+          flat: 0
+
+恐惧:
+  default_params:
+    duration: 1
+    is_control_effect: true
+  logic_hooks:
+    ON_APPLY:
+      - type: SET_FLAG
+        target: owner
+        flag_name: is_stunned
+        value: true
+    ON_REMOVE:
+      - type: SET_FLAG
+        target: owner
+        flag_name: is_stunned
+        value: false
+
+灼烧:
+  default_params:
+    duration: 2
+    potency: 20
+    is_control_effect: false
+  logic_hooks:
+    ON_TURN_START:
+      - type: DEAL_DAMAGE
+        target: owner
+        amount:
+          source: effect
+          value: potency
+        damage_type: fire
+
+麻痹:
+  default_params:
+    duration: 1
+    is_control_effect: true
+  logic_hooks:
+    ON_APPLY:
+      - type: SET_FLAG
+        target: owner
+        flag_name: is_stunned
+        value: true
+    ON_REMOVE:
+      - type: SET_FLAG
+        target: owner
+        flag_name: is_stunned
+        value: false
+
+减速:
+  default_params:
+    duration: 2
+    potency: 0.4
+    is_control_effect: false
+    target_attribute: speed
+  logic_hooks:
+    PASSIVE:
+      - type: MODIFY_ATTRIBUTE
+        returns:
+          ratio: "1.0 - effect.potency"
+          flat: 0
+
+月光标记:
+  default_params:
+    duration: 2
+    potency: 0.2
+    is_control_effect: false
+    target_attribute: armor
+  logic_hooks:
+    PASSIVE:
+      - type: MODIFY_ATTRIBUTE
+        returns:
+          ratio: "1.0 - effect.potency"
+          flat: 0
+
+星光:
+  default_params:
+    duration: 1
+    potency: 15
+    is_control_effect: false
+  logic_hooks:
+    ON_TURN_START:
+      - type: DEAL_DAMAGE
+        target: owner
+        amount:
+          source: effect
+          value: potency
+        damage_type: arcane
+
+神圣净化:
+  default_params:
+    duration: 1
+    is_control_effect: true
+  logic_hooks:
+    ON_APPLY:
+      - type: CLEAR_EFFECTS
+        target: owner
+
+神圣护盾:
+  default_params:
+    duration: 2
+    potency: 0.6
+    is_control_effect: false
+    target_attribute: armor
+  logic_hooks:
+    PASSIVE:
+      - type: MODIFY_ATTRIBUTE
+        returns:
+          ratio: "1.0 + effect.potency"
+          flat: 0
+
+穿透:
+  default_params:
+    duration: 1
+    potency: 0.5
+    is_control_effect: false
+    target_attribute: armor
+  logic_hooks:
+    PASSIVE:
+      - type: MODIFY_ATTRIBUTE
+        returns:
+          ratio: "1.0 - effect.potency"
+          flat: 0
+
+野兽印记:
+  default_params:
+    duration: 2
+    potency: 0.3
+    is_control_effect: false
+    target_attribute: attack
+  logic_hooks:
+    PASSIVE:
+      - type: MODIFY_ATTRIBUTE
+        returns:
+          ratio: "1.0 - effect.potency"
+          flat: 0
+
+自然诅咒:
+  default_params:
+    duration: 3
+    potency: 0.25
+    is_control_effect: false
+    target_attribute: attack
+  logic_hooks:
+    PASSIVE:
+      - type: MODIFY_ATTRIBUTE
+        returns:
+          ratio: "1.0 - effect.potency"
+          flat: 0
+
+生命恢复:
+  default_params:
+    duration: 2
+    potency: 50
+    is_control_effect: false
+  logic_hooks:
+    ON_TURN_START:
+      - type: HEAL
+        target: owner
+        amount:
+          source: effect
+          value: potency
+
+黑暗腐蚀:
+  default_params:
+    duration: 2
+    potency: 35
+    is_control_effect: false
+  logic_hooks:
+    ON_TURN_START:
+      - type: DEAL_DAMAGE
+        target: owner
+        amount:
+          source: effect
+          value: potency
+        damage_type: shadow
+
+死亡印记:
+  default_params:
+    duration: 2
+    potency: 0.2
+    is_control_effect: false
+    target_attribute: attack
+  logic_hooks:
+    PASSIVE:
+      - type: MODIFY_ATTRIBUTE
+        returns:
+          ratio: "1.0 - effect.potency"
+          flat: 0

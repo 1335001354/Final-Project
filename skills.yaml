@@ -1,23 +1,150 @@
-# 这个文件现在只定义技能的“行为模板”
+# 这个文件现在只定义技能的"行为模板"
 
 致死打击:
   target_type: 'enemy'
+  target_count: 1
   effects_to_apply:
     - name: "虚弱"
 
 撕裂:
   target_type: 'enemy'
+  target_count: 1
   effects_to_apply:
     - name: "流血"
-      potency: 25 # 注意：像这种效果的数值，如果它不因英雄而变，可以保留在这里作为默认值
+      potency: 25
       duration: 2
 
 火球术:
   target_type: 'enemy'
+  target_count: 1
   # 火球术本身不附加任何持续效果
   effects_to_apply: []
 
 霜之新星:
   target_type: 'enemy'
+  target_count: 1
   effects_to_apply:
     - name: "眩晕"
+
+# 新增技能模板
+死亡缠绕:
+  target_type: 'enemy'
+  target_count: 1
+  effects_to_apply:
+    - name: "剧毒"
+      potency: 30
+      duration: 3
+
+冰霜护甲:
+  target_type: 'self'
+  target_count: 1
+  effects_to_apply:
+    - name: "护甲强化"
+      potency: 0.5
+      duration: 2
+
+恶魔变身:
+  target_type: 'enemy'
+  target_count: 1
+  effects_to_apply:
+    - name: "恐惧"
+      duration: 1
+
+献祭:
+  target_type: 'enemy'
+  target_count: 1
+  effects_to_apply:
+    - name: "灼烧"
+      potency: 20
+      duration: 2
+
+闪电链:
+  target_type: 'enemy'
+  target_count: 2
+  effects_to_apply:
+    - name: "麻痹"
+      duration: 1
+
+地震术:
+  target_type: 'enemy'
+  target_count: 1
+  effects_to_apply:
+    - name: "减速"
+      potency: 0.4
+      duration: 2
+
+月神箭:
+  target_type: 'enemy'
+  target_count: 1
+  effects_to_apply:
+    - name: "月光标记"
+      duration: 2
+
+星火术:
+  target_type: 'enemy'
+  target_count: 1
+  effects_to_apply:
+    - name: "星光"
+      potency: 15
+      duration: 1
+
+神圣打击:
+  target_type: 'enemy'
+  target_count: 1
+  effects_to_apply:
+    - name: "神圣净化"
+      duration: 1
+
+圣光护盾:
+  target_type: 'self'
+  target_count: 1
+  effects_to_apply:
+    - name: "神圣护盾"
+      potency: 0.6
+      duration: 2
+
+多重射击:
+  target_type: 'enemy'
+  target_count: 3
+  effects_to_apply:
+    - name: "穿透"
+      duration: 1
+
+野兽呼唤:
+  target_type: 'enemy'
+  target_count: 1
+  effects_to_apply:
+    - name: "野兽印记"
+      potency: 0.3
+      duration: 2
+
+自然之怒:
+  target_type: 'enemy'
+  target_count: 1
+  effects_to_apply:
+    - name: "自然诅咒"
+      potency: 0.25
+      duration: 3
+
+生命绽放:
+  target_type: 'self'
+  target_count: 1
+  effects_to_apply:
+    - name: "生命恢复"
+      potency: 50
+      duration: 2
+
+黑暗箭:
+  target_type: 'enemy'
+  target_count: 1
+  effects_to_apply:
+    - name: "黑暗腐蚀"
+      potency: 35
+      duration: 2
+
+死亡之握:
+  target_type: 'enemy'
+  target_count: 1
+  effects_to_apply:
+    - name: "死亡印记"
+      duration: 2
