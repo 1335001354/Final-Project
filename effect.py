@@ -56,18 +56,20 @@ class GenericEffect:
 
     # --- 【修正一】所有 on_* 方法都修正了 _execute_hook 的调用参数 ---
     
-    def on_apply(self, target: 'Unit'):
-        print(f"[{target.name}] 获得了效果：[{self.name}]（效力：{self.potency}, 持续：{self.duration}回合）。")
-        context = {'target': target, 'user': self.source}
+    def on_apply(self, target: 'Unit', silent: bool = False):
+        if not silent:
+            print(f"[{target.name}] 获得了效果：[{self.name}]（效力：{self.potency}, 持续：{self.duration}回合）。")
+        context = {'target': target, 'user': self.source, 'silent': silent}
         self._execute_hook(TriggerPhase.ON_APPLY, context)
         
-    def on_remove(self, target: 'Unit'):
-        print(f"[{target.name}] 的效果 [{self.name}] 消失了。")
-        context = {'target': target, 'user': self.source}
+    def on_remove(self, target: 'Unit', silent: bool = False):
+        if not silent:
+            print(f"[{target.name}] 的效果 [{self.name}] 消失了。")
+        context = {'target': target, 'user': self.source, 'silent': silent}
         self._execute_hook(TriggerPhase.ON_REMOVE, context)
 
-    def on_turn_start(self, target: 'Unit'):
-        context = {'target': target, 'user': self.source}
+    def on_turn_start(self, target: 'Unit', silent: bool = False):
+        context = {'target': target, 'user': self.source, 'silent': silent}
         self._execute_hook(TriggerPhase.ON_TURN_START, context)
 
     def on_turn_end(self, target: 'Unit'):

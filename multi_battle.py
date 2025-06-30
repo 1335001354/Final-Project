@@ -6,12 +6,15 @@ if TYPE_CHECKING:
     from hero import Unit
 
 class MultiBattle:
-    def __init__(self, team1: List[Unit], team2: List[Unit]):
+    def __init__(self, team1: List[Unit], team2: List[Unit], silent: bool = False):
         self.team1 = team1
         self.team2 = team2
-        print("====== 多英雄战斗开始 ======")
-        print(f"队伍1 ({len(team1)}人): {', '.join([u.name for u in team1])}")
-        print(f"队伍2 ({len(team2)}人): {', '.join([u.name for u in team2])}")
+        self.silent = silent
+        
+        if not self.silent:
+            print("====== 多英雄战斗开始 ======")
+            print(f"队伍1 ({len(team1)}人): {', '.join([u.name for u in team1])}")
+            print(f"队伍2 ({len(team2)}人): {', '.join([u.name for u in team2])}")
 
     def get_alive_units(self, team: List[Unit]) -> List[Unit]:
         """获取队伍中存活的单位"""
@@ -33,7 +36,8 @@ class MultiBattle:
         turn = 1
         
         while self.get_alive_units(self.team1) and self.get_alive_units(self.team2):
-            print(f"\n★★★★★ 回合 {turn} ★★★★★")
+            if not self.silent:
+                print(f"\n★★★★★ 回合 {turn} ★★★★★")
             
             # 获取所有存活单位，按速度排序
             all_alive = self.get_all_alive_units()
@@ -44,8 +48,9 @@ class MultiBattle:
                 if unit.current_hp <= 0:
                     continue
                     
-                print(f"\n轮到 [{unit.name}] 行动...")
-                unit.process_turn_start()
+                if not self.silent:
+                    print(f"\n轮到 [{unit.name}] 行动...")
+                unit.process_turn_start(silent=self.silent)
                 
                 # 获取对手
                 opponents = self.get_opponents(unit)
@@ -54,7 +59,7 @@ class MultiBattle:
                 
                 # 执行行动
                 self._unit_act(unit, opponents)
-                unit.process_turn_end()
+                unit.process_turn_end(silent=self.silent)
                 
                 # 检查是否有队伍被全灭
                 if not self.get_alive_units(self.team1) or not self.get_alive_units(self.team2):
@@ -63,31 +68,53 @@ class MultiBattle:
             turn += 1
 
         # 战斗结束，宣布胜利者
-        print("\n====== 战斗结束 ======")
         team1_alive = self.get_alive_units(self.team1)
         team2_alive = self.get_alive_units(self.team2)
         
-        if team1_alive and not team2_alive:
-            print(f"🏆 队伍1胜利！")
-            print(f"存活成员: {', '.join([u.name for u in team1_alive])}")
-        elif team2_alive and not team1_alive:
-            print(f"🏆 队伍2胜利！")
-            print(f"存活成员: {', '.join([u.name for u in team2_alive])}")
-        else:
-            print("平局！")
+        # 返回结果而不是直接打印
+        result = {
+            'winner': None,
+            'survivors': [],
+            'turns': turn - 1,
+            'team1_final': [(u.name, u.current_hp, u.hp) for u in self.team1],
+            'team2_final': [(u.name, u.current_hp, u.hp) for u in self.team2]
+        }
         
-        print("\n最终状态：")
-        print("队伍1:")
-        for unit in self.team1:
-            print(f"  {unit}")
-        print("队伍2:")
-        for unit in self.team2:
-            print(f"  {unit}")
+        if team1_alive and not team2_alive:
+            result['winner'] = 'team1'
+            result['survivors'] = [u.name for u in team1_alive]
+        elif team2_alive and not team1_alive:
+            result['winner'] = 'team2'
+            result['survivors'] = [u.name for u in team2_alive]
+        else:
+            result['winner'] = 'draw'
+        
+        if not self.silent:
+            print("\n====== 战斗结束 ======")
+            if result['winner'] == 'team1':
+                print(f"🏆 队伍1胜利！")
+                print(f"存活成员: {', '.join(result['survivors'])}")
+            elif result['winner'] == 'team2':
+                print(f"🏆 队伍2胜利！")
+                print(f"存活成员: {', '.join(result['survivors'])}")
+            else:
+                print("平局！")
+            
+            print("\n最终状态：")
+            print("队伍1:")
+            for unit in self.team1:
+                print(f"  {unit}")
+            print("队伍2:")
+            for unit in self.team2:
+                print(f"  {unit}")
+        
+        return result
 
     def _unit_act(self, unit: Unit, opponents: List[Unit]):
         """单位行动逻辑"""
         if unit.is_stunned:
-            print(f"[{unit.name}] 处于眩晕状态，无法行动！")
+            if not self.silent:
+                print(f"[{unit.name}] 处于眩晕状态，无法行动！")
             return
             
         # 尝试使用技能
@@ -97,18 +124,21 @@ class MultiBattle:
                 return
         
         # 没有可用技能，执行普通攻击
-        print(f"[{unit.name}] 没有可用的技能，执行普通攻击。")
+        if not self.silent:
+            print(f"[{unit.name}] 没有可用的技能，执行普通攻击。")
         target = random.choice(opponents)
         is_crit = random.random() < unit.crit_rate
-        target.take_damage(unit.attack, is_crit=is_crit)
+        target.take_damage(unit.attack, is_crit=is_crit, silent=self.silent)
 
     def _use_skill(self, user: Unit, skill, opponents: List[Unit]):
         """使用技能"""
         if not skill.is_ready():
-            print(f"[{user.name}] 尝试使用 [{skill.name}]，但技能尚未冷却！")
+            if not self.silent:
+                print(f"[{user.name}] 尝试使用 [{skill.name}]，但技能尚未冷却！")
             return False
 
-        print(f"[{user.name}] 使用了技能：『{skill.name}』!")
+        if not self.silent:
+            print(f"[{user.name}] 使用了技能：『{skill.name}』!")
         
         # 选择目标
         if skill.target_type == 'self':
@@ -124,7 +154,7 @@ class MultiBattle:
             is_crit = random.random() < user.crit_rate
             
             for target in targets:
-                target.take_damage(damage, is_crit=is_crit)
+                target.take_damage(damage, is_crit=is_crit, silent=self.silent)
 
         # 2. 施加效果
         for effect_data in skill.effects_to_apply:
@@ -132,7 +162,7 @@ class MultiBattle:
                 effect_instance = skill.effect_factory.create(**effect_data)
                 if effect_instance:
                     effect_instance.source = user
-                    target.add_effect(effect_instance)
+                    target.add_effect(effect_instance, silent=self.silent)
         
         # 3. 进入冷却
         skill.current_cooldown = skill.cooldown_max + 1

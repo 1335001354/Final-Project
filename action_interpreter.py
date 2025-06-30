@@ -90,7 +90,8 @@ class ActionInterpreter:
             amount = self._resolve_value(params.get('amount'), context)
             if target and amount > 0:
                 # 持续伤害不触发暴击
-                target.take_damage(int(amount), is_crit=False)
+                silent = context.get('silent', False)
+                target.take_damage(int(amount), is_crit=False, silent=silent)
 
     def _handle_heal(self, params: Dict, context: Dict):
         target_def = params.get('target')
@@ -100,7 +101,9 @@ class ActionInterpreter:
             if target and amount > 0:
                 heal_amount = min(amount, target.hp - target.current_hp)
                 target.current_hp += heal_amount
-                print(f"[{target.name}] 恢复了 {heal_amount} 点生命值，当前生命值: {target.current_hp}/{target.hp}")
+                silent = context.get('silent', False)
+                if not silent:
+                    print(f"[{target.name}] 恢复了 {heal_amount} 点生命值，当前生命值: {target.current_hp}/{target.hp}")
 
     def _handle_clear_effects(self, params: Dict, context: Dict):
         target_def = params.get('target')
@@ -109,9 +112,11 @@ class ActionInterpreter:
             if target and target.effects:
                 removed_effects = list(target.effects)
                 target.effects.clear()
+                silent = context.get('silent', False)
                 for effect in removed_effects:
-                    effect.on_remove(target)
-                print(f"[{target.name}] 的所有效果被清除了！")
+                    effect.on_remove(target, silent=silent)
+                if not silent:
+                    print(f"[{target.name}] 的所有效果被清除了！")
 
     def _handle_set_flag(self, params: Dict, context: Dict):
         target_def = params.get('target')
@@ -121,7 +126,9 @@ class ActionInterpreter:
             value = params.get('value')
             if target and flag_name:
                 setattr(target, flag_name, value)
-                print(f"[{target.name}] 的状态标志 '{flag_name}' 被设置为 {value}。")
+                silent = context.get('silent', False)
+                if not silent:
+                    print(f"[{target.name}] 的状态标志 '{flag_name}' 被设置为 {value}。")
     
     def _handle_modify_attribute(self, params: Dict, context: Dict) -> Dict | None:
         """处理被动属性修改，它只返回值，不执行动作。"""
