@@ -1,28 +1,28 @@
 剧毒:
   default_params:
     duration: 3
-    potency: 20
+    potency: 0.2  # 改为20%的施加者攻击力
     is_control_effect: false
   logic_hooks:
     ON_TURN_START:
       - type: DEAL_DAMAGE
         target: owner # 'owner' 指效果的持有者
         amount:
-          source: effect # 数值来源是效果本身
-          value: potency  # 效果的 potency 属性
+          source: source_attack  # 基于施加者攻击力
+          multiplier: potency  # 效果的 potency 作为倍数
         damage_type: poison
 流血:
   default_params:
     duration: 2
-    potency: 25 # 25点流血伤害
+    potency: 0.25  # 改为25%的施加者攻击力
     is_control_effect: false
   logic_hooks:
     ON_TURN_START:
       - type: DEAL_DAMAGE
         target: owner
         amount:
-          source: effect
-          value: potency
+          source: source_attack  # 基于施加者攻击力
+          multiplier: potency  # 效果的 potency 作为倍数
         damage_type: bleed # 流血伤害类型
 
 虚弱:
@@ -90,15 +90,15 @@
 灼烧:
   default_params:
     duration: 2
-    potency: 20
+    potency: 0.2  # 改为20%的施加者攻击力
     is_control_effect: false
   logic_hooks:
     ON_TURN_START:
       - type: DEAL_DAMAGE
         target: owner
         amount:
-          source: effect
-          value: potency
+          source: source_attack  # 基于施加者攻击力
+          multiplier: potency  # 效果的 potency 作为倍数
         damage_type: fire
 
 麻痹:
@@ -146,15 +146,15 @@
 星光:
   default_params:
     duration: 1
-    potency: 15
+    potency: 0.15  # 改为15%的施加者攻击力
     is_control_effect: false
   logic_hooks:
     ON_TURN_START:
       - type: DEAL_DAMAGE
         target: owner
         amount:
-          source: effect
-          value: potency
+          source: source_attack  # 基于施加者攻击力
+          multiplier: potency  # 效果的 potency 作为倍数
         damage_type: arcane
 
 神圣净化:
@@ -221,36 +221,36 @@
 生命恢复:
   default_params:
     duration: 2
-    potency: 50
+    potency: 0.3  # 改为30%的施加者攻击力
     is_control_effect: false
   logic_hooks:
     ON_TURN_START:
       - type: HEAL
         target: owner
         amount:
-          source: effect
-          value: potency
+          source: source_attack  # 基于施加者攻击力
+          multiplier: potency  # 效果的 potency 作为倍数
 
 黑暗腐蚀:
   default_params:
     duration: 2
-    potency: 35
+    potency: 0.35  # 改为35%的施加者攻击力
     is_control_effect: false
   logic_hooks:
     ON_TURN_START:
       - type: DEAL_DAMAGE
         target: owner
         amount:
-          source: effect
-          value: potency
+          source: source_attack  # 基于施加者攻击力
+          multiplier: potency  # 效果的 potency 作为倍数
         damage_type: shadow
 
 死亡印记:
   default_params:
     duration: 2
-    potency: 0.2
+    potency: 0.4
     is_control_effect: false
-    target_attribute: attack
+    target_attribute: armor
   logic_hooks:
     PASSIVE:
       - type: MODIFY_ATTRIBUTE

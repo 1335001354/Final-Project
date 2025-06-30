@@ -10,9 +10,16 @@
     - name: "致死打击"           # 技能模板名
       damage_multiplier: 1.5   # 伤害倍率在这里定义
       cooldown: 2              # 冷却时间在这里定义
+      effects:
+        - name: "虚弱"
+          potency: 0.4  # 加尔鲁什的虚弱更强
     - name: "撕裂"
       damage_multiplier: 0.5
       cooldown: 1
+      effects:
+        - name: "流血"
+          potency: 0.3  # 加尔鲁什的流血更强
+          duration: 2
 
 吉安娜:
   class: 'Hero'
@@ -29,6 +36,9 @@
     - name: "霜之新星"
       damage_multiplier: 0.3
       cooldown: 2
+      effects:
+        - name: "眩晕"
+          duration: 1
 
 阿尔萨斯:
   class: 'Hero'
@@ -42,9 +52,17 @@
     - name: "死亡缠绕"
       damage_multiplier: 1.8
       cooldown: 3
+      effects:
+        - name: "剧毒"
+          potency: 0.25  # 阿尔萨斯的剧毒更强
+          duration: 3
     - name: "冰霜护甲"
       damage_multiplier: 0.0
       cooldown: 4
+      effects:
+        - name: "护甲强化"
+          potency: 0.6  # 阿尔萨斯的护甲强化更强
+          duration: 2
 
 伊利丹:
   class: 'Hero'
@@ -58,9 +76,16 @@
     - name: "恶魔变身"
       damage_multiplier: 2.5
       cooldown: 4
+      effects:
+        - name: "恐惧"
+          duration: 1
     - name: "献祭"
       damage_multiplier: 0.8
       cooldown: 2
+      effects:
+        - name: "灼烧"
+          potency: 0.25  # 伊利丹的灼烧更强
+          duration: 2
 
 萨尔:
   class: 'Hero'
@@ -74,9 +99,16 @@
     - name: "闪电链"
       damage_multiplier: 1.6
       cooldown: 2
+      effects:
+        - name: "麻痹"
+          duration: 1
     - name: "地震术"
       damage_multiplier: 1.2
       cooldown: 3
+      effects:
+        - name: "减速"
+          potency: 0.5  # 萨尔的减速更强
+          duration: 2
 
 泰兰德:
   class: 'Hero'
@@ -90,9 +122,17 @@
     - name: "月神箭"
       damage_multiplier: 2.0
       cooldown: 2
+      effects:
+        - name: "月光标记"
+          potency: 0.25  # 泰兰德的月光标记更强
+          duration: 2
     - name: "星火术"
       damage_multiplier: 1.4
       cooldown: 1
+      effects:
+        - name: "星光"
+          potency: 0.2  # 泰兰德的星光更强
+          duration: 1
 
 乌瑟尔:
   class: 'Hero'
@@ -106,9 +146,16 @@
     - name: "神圣打击"
       damage_multiplier: 1.7
       cooldown: 2
+      effects:
+        - name: "神圣净化"
+          duration: 1
     - name: "圣光护盾"
       damage_multiplier: 0.0
       cooldown: 3
+      effects:
+        - name: "神圣护盾"
+          potency: 0.7  # 乌瑟尔的神圣护盾更强
+          duration: 2
 
 雷克萨:
   class: 'Hero'
@@ -122,9 +169,17 @@
     - name: "多重射击"
       damage_multiplier: 1.9
       cooldown: 2
+      effects:
+        - name: "穿透"
+          potency: 0.6  # 雷克萨的穿透更强
+          duration: 1
     - name: "野兽呼唤"
       damage_multiplier: 1.1
       cooldown: 3
+      effects:
+        - name: "野兽印记"
+          potency: 0.35  # 雷克萨的野兽印记更强
+          duration: 2
 
 玛法里奥:
   class: 'Hero'
@@ -138,9 +193,17 @@
     - name: "自然之怒"
       damage_multiplier: 2.1
       cooldown: 3
+      effects:
+        - name: "自然诅咒"
+          potency: 0.3  # 玛法里奥的自然诅咒更强
+          duration: 3
     - name: "生命绽放"
       damage_multiplier: 0.6
       cooldown: 2
+      effects:
+        - name: "生命恢复"
+          potency: 0.4  # 玛法里奥的治疗更强
+          duration: 2
 
 希尔瓦娜斯:
   class: 'Hero'
@@ -154,6 +217,14 @@
     - name: "黑暗箭"
       damage_multiplier: 2.3
       cooldown: 2
+      effects:
+        - name: "黑暗腐蚀"
+          potency: 0.4  # 希尔瓦娜斯的黑暗腐蚀更强
+          duration: 2
     - name: "死亡之握"
       damage_multiplier: 1.3
       cooldown: 3
+      effects:
+        - name: "死亡印记"
+          potency: 0.5  # 希尔瓦娜斯的死亡印记更强
+          duration: 2

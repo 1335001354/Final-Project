@@ -33,8 +33,15 @@ class UnitFactory:
         for skill_config in skills_config_list:
             skill_name = skill_config.get('name')
             if not skill_name: continue
-            skill_config.pop('name', None)
-            skill_instance = self.skill_factory.create(skill_name, **skill_config)
+            
+            # 提取技能配置
+            skill_params = skill_config.copy()
+            skill_params.pop('name', None)
+            
+            # 提取自定义效果配置
+            custom_effects = skill_params.pop('effects', None)
+            
+            skill_instance = self.skill_factory.create(skill_name, custom_effects=custom_effects, **skill_params)
             if skill_instance:
                 skill_instances.append(skill_instance)
 

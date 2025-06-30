@@ -131,7 +131,6 @@
   target_count: 1
   effects_to_apply:
     - name: "生命恢复"
-      potency: 50
       duration: 2
 
 黑暗箭:

@@ -1,7 +1,7 @@
 # skill_factory.py
 from __future__ import annotations
 import yaml
-from typing import Dict, Any, Optional, TYPE_CHECKING
+from typing import Dict, Any, Optional, List, TYPE_CHECKING
 from skill import Skill
 
 if TYPE_CHECKING:
@@ -20,7 +20,7 @@ class SkillFactory:
                 self._templates[name] = template_data
                 print(f"从文件加载了技能模板：'{name}'")
 
-    def create(self, name: str, **kwargs) -> Optional[Skill]:
+    def create(self, name: str, custom_effects: Optional[List[Dict[str, Any]]] = None, **kwargs) -> Optional[Skill]:
         template = self._templates.get(name)
         if not template:
             print(f"错误：尝试创建未注册的技能 '{name}'。")
@@ -28,6 +28,10 @@ class SkillFactory:
             
         final_params = template.copy()
         final_params.update(kwargs)
+        
+        # 如果有自定义效果配置，覆盖默认的效果配置
+        if custom_effects:
+            final_params['effects_to_apply'] = custom_effects
 
         return Skill(
             name=name,
